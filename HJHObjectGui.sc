@@ -1,7 +1,7 @@
 
 HJHObjectGui : ObjectGui {
 		// like felix's but it saves the layout that was passed in
-	var	<masterLayout, <layout, <iMadeMasterLayout = false,
+	var	<mainLayout, <layout, <iMadeLayout = false,
 		<argBounds;
 
 	*initClass {
@@ -25,12 +25,12 @@ HJHObjectGui : ObjectGui {
 	guify { arg lay,bounds,title;
 		argBounds = bounds;	// some of my gui's need to know this
 		if(lay.isNil,{
-			masterLayout = lay = this.class.windowClass.new
+			mainLayout = lay = this.class.windowClass.new
 				(title ?? { model.asString.copyRange(0,50) },
 				bounds);
-			iMadeMasterLayout = true;	// now when I'm removed, I'll close the window too
+			iMadeLayout = true;	// now when I'm removed, I'll close the window too
 		},{
-			masterLayout = lay;	// should only pass in the FixedWidthMultiPageLayout
+			mainLayout = lay;	// should only pass in the FixedWidthMultiPageLayout
 			lay = lay.asPageLayout(title,bounds);
 		});
 		// i am not really a view in the hierarchy
@@ -42,12 +42,12 @@ HJHObjectGui : ObjectGui {
 		model.notNil.if({
 			view.notClosed.if({
 				view.remove;
-				masterLayout.recursiveResize;
+				mainLayout.recursiveResize;
 			});
 			model.view = nil;
 			model = nil;
-			iMadeMasterLayout.if({
-				masterLayout.close;
+			iMadeLayout.if({
+				mainLayout.close;
 			});
 		});
 	}
